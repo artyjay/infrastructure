@@ -1,21 +1,13 @@
 
 ## docker file with build env setup for stuff I want to make
-
-## gcc8 - 
-## clang 7
-## setup alternatives
-## setup python
-## setup python env
-## pip some stuff
-## setup git
-## cmake
-
 FROM ubuntu:bionic
 LABEL maintainer="Rob Johnson"
 
 ## Common tools
 RUN apt-get -qq update \
  && apt-get -qq install -y --no-install-recommends \
+    pkg-config \
+    sudo \
     git \
     binutils \
     nasm \
@@ -27,10 +19,11 @@ RUN apt-get -qq update \
     wget \
     gnupg \
     python3 \
+    python3-pip \
  && rm -rf /var/lib/apt/lists/*
 
 ## CMake
-RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
+RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-Linux-x86_64.tar.gz | tar -xz --strip-components 1 -C /usr
 
 ## GCC
 RUN apt-get -qq update \
@@ -52,3 +45,16 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
 ## Compilers
 RUN update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 100 --slave /usr/bin/c++ c++ /usr/bin/g++ \
  && update-alternatives --install /usr/bin/cc cc /usr/bin/clang 100 --slave /usr/bin/c++ c++ /usr/bin/clang++
+
+## Update default python to python3.
+RUN rm -f /usr/bin/python \
+ && update-alternatives --install /usr/bin/python python /usr/bin/python3 100 \
+ && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 100
+
+## Conan
+RUN python -m pip install --upgrade pip \
+ && pip install setuptools \
+ && pip install wheel \
+ && pip install conan \
+ && conan profile new default --detect \
+ && conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
