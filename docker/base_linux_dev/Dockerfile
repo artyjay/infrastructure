@@ -14,6 +14,7 @@ RUN apt-get update \
     clang-format-7 \
     curl \
     g++-8-multilib \
+    gdb-multiarch \
     git \
     lld-7 \
     lldb-7 \
