@@ -35,7 +35,7 @@ RUN update-alternatives --install /usr/bin/gcc   gcc   /usr/bin/gcc-8   100 --sl
  && update-alternatives --install /usr/bin/cc    cc    /usr/bin/gcc     100 --slave /usr/bin/c++     c++     /usr/bin/g++
 
 ## CMake installation
-RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
+RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
 
 ## Update default python to python3.
 RUN rm -f /usr/bin/python \
@@ -46,6 +46,6 @@ RUN rm -f /usr/bin/python \
 RUN python -m pip install --upgrade pip \
  && pip install setuptools \
  && pip install wheel \
- && pip install conan \
+ && pip install conan==1.16.1 \
  && conan profile new default --detect \
  && conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
