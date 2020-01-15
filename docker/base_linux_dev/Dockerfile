@@ -46,6 +46,6 @@ RUN rm -f /usr/bin/python \
 RUN python -m pip install --upgrade pip \
  && pip install setuptools \
  && pip install wheel \
- && pip install conan \
+ && pip install conan==1.21.1 \
  && conan profile new default --detect \
  && conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
