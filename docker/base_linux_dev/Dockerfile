@@ -35,7 +35,7 @@ RUN update-alternatives --install /usr/bin/gcc   gcc   /usr/bin/gcc-8   100 --sl
  && update-alternatives --install /usr/bin/cc    cc    /usr/bin/gcc     100 --slave /usr/bin/c++     c++     /usr/bin/g++
 
 ## CMake installation
-RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
+RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
 
 ## Update default python to python3.
 RUN rm -f /usr/bin/python \
