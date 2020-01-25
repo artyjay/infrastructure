@@ -16,6 +16,7 @@ RUN apt-get update \
     g++-8-multilib \
     gdb-multiarch \
     git \
+    libtool \
     lld-7 \
     lldb-7 \
     nasm \
