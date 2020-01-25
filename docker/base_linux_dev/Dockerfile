@@ -4,34 +4,41 @@ LABEL maintainer="R.Johnson"
 ## Install packages
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    gnupg \
-    wget \
+ca-certificates \
+gnupg \
+wget \
+software-properties-common \
  && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
+ && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
+ && add-apt-repository -y ppa:deadsnakes/ppa \
+ && apt-get update \
  && apt-get install -y --no-install-recommends \
-    binutils \
-    clang-7 \
-    clang-format-7 \
-    curl \
-    g++-8-multilib \
-    gdb-multiarch \
-    git \
-    libtool \
-    lld-7 \
-    lldb-7 \
-    nasm \
-    ninja-build \
-    pkg-config \
-    python3 \
-    python3-pip \
-    sudo \
-    tar \
-    xz-utils \
+automake \
+binutils \
+clang-9 \
+clang-format-9 \
+curl \
+g++-9 \
+g++-9-multilib \
+gdb-multiarch \
+git \
+libtool \
+lld-9 \
+lldb-9 \
+m4 \
+nasm \
+ninja-build \
+pkg-config \
+python3.8 \
+python3-pip \
+sudo \
+tar \
+xz-utils \
  && rm -rf /var/lib/apt/lists/*
 
 ## Compiler configuration - prefer Clang default
-RUN update-alternatives --install /usr/bin/gcc   gcc   /usr/bin/gcc-8   100 --slave /usr/bin/g++     g++     /usr/bin/g++-8 \
- && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-7 100 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-7 \
+RUN update-alternatives --install /usr/bin/gcc   gcc   /usr/bin/gcc-9   100 --slave /usr/bin/g++     g++     /usr/bin/g++-9 \
+ && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-9 100 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-9 \
  && update-alternatives --install /usr/bin/cc    cc    /usr/bin/clang   100 --slave /usr/bin/c++     c++     /usr/bin/clang++ \
  && update-alternatives --install /usr/bin/cc    cc    /usr/bin/gcc     100 --slave /usr/bin/c++     c++     /usr/bin/g++
 
@@ -40,7 +47,7 @@ RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.16.2/cmak
 
 ## Update default python to python3.
 RUN rm -f /usr/bin/python \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3 100 \
+ && update-alternatives --install /usr/bin/python python /usr/bin/python3.8 100 \
  && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 100
 
 ## Conan
