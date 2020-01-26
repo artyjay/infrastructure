@@ -30,6 +30,7 @@ nasm \
 ninja-build \
 pkg-config \
 python3.8 \
+python3.8-dev \
 python3-pip \
 sudo \
 tar \
