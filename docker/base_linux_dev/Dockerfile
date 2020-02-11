@@ -1,9 +1,12 @@
 FROM ubuntu:bionic
 LABEL maintainer="R.Johnson"
 
-## Install packages
+## Update and upgrade
 RUN apt-get update \
- && apt-get install -y --no-install-recommends \
+ && apt-get upgrade -y
+
+## Install packages
+RUN apt-get install -y --no-install-recommends \
 ca-certificates \
 gnupg \
 wget \
@@ -46,14 +49,19 @@ RUN update-alternatives --install /usr/bin/gcc   gcc   /usr/bin/gcc-9   100 --sl
 ## CMake installation
 RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.16.2/cmake-3.16.2-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
 
-## Update default python to python3.
+## Remove symbolic links for Python3.x and explicitly point to Python3.8
 RUN rm -f /usr/bin/python \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3.8 100 \
- && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 100
+ && rm -f /usr/bin/python3 \
+ && rm -f /usr/bin/python3m \
+ && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100 \
+ && update-alternatives --install /usr/bin/python  python  /usr/bin/python3 100 \
+ && update-alternatives --install /usr/bin/pip     pip     /usr/bin/pip3 100
+
+## Upgrade pip
+RUN python -m pip install --upgrade pip
 
 ## Conan
-RUN python -m pip install --upgrade pip \
- && pip install setuptools \
+RUN pip install setuptools \
  && pip install wheel \
  && pip install conan==1.21.1 \
  && conan profile new default --detect \
