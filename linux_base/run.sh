@@ -8,8 +8,8 @@ if [ "$MOUNT_PATH" = "" ]; then
 	MOUNT_PATH="$(readlink -f $SCRIPTPATH)"
 fi
 
-echo "\nLaunching:        artyjay/base_linux_dev"
+echo "\nLaunching:        artyjay/linux_base"
 echo "Host folder:      $MOUNT_PATH"
 echo "Container folder: /host\n"
 
-docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $MOUNT_PATH:/host -w /host -it artyjay/base_linux_dev
+docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $MOUNT_PATH:/host -w /host -it artyjay/linux_base
