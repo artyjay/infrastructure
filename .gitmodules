@@ -1,0 +1,3 @@
+[submodule "linux_base/conan_config"]
+	path = linux_base/conan_config
+	url = https://github.com/artyjay/ConanConfig.git

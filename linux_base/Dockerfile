@@ -87,7 +87,7 @@ RUN curl https://pyenv.run | bash \
 
 # Python & Conan installation
 COPY requirements.txt /tmp_files/
-COPY generate_conan_profiles.py /tmp_files/
+COPY conan_config/setup_conan.py /tmp_files/
 ENV PYENV_ROOT /home/builder/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install 3.9.2 \  
@@ -97,5 +97,6 @@ RUN pyenv install 3.9.2 \
  && mkdir -p /home/builder/.conan \
  && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \
  && printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc \
- && conan remote add artyjay https://artyjay.jfrog.io/artifactory/api/conan/conan-local \
- && python /tmp_files/generate_conan_profiles.py
+ && python /tmp_files/setup_conan.py -p Linux
+
+ ENV CONAN_SYSREQUIRES_MODE enabled
