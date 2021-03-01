@@ -8,15 +8,18 @@ Various Docker images for use in artyjay projects.
 > sudo ./build.sh
 ```
 
-## Pushing
+## Remote login
+Images are stored on the Github Containers infrastructure, so a Personal Access Token should be generated on your GitHub account with `package write` access and add it to your environment as `GHCR_PAT`
 
-Images are stored on the Github Containers infrastructure
-
-Generate a Personal Access Token with `package write` access
+Now login to the remote using:
 
 ```
-> export CR_PAT=<Generated PAT>
-> echo $CR_PAT | docker login ghcr.io -u artyjay --password-stdin
+> echo $GHCR_PAT | docker login ghcr.io -u artyjay --password-stdin
+```
+
+## Pushing
+
+```
 > docker push ghcr.io/artyjay/<subdir>:latest
 ```
 

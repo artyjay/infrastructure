@@ -12,4 +12,4 @@ echo "\nLaunching:        artyjay/linux_base"
 echo "Host folder:      $MOUNT_PATH"
 echo "Container folder: /host\n"
 
-docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $MOUNT_PATH:/host -w /host -it artyjay/linux_base
+docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -v $MOUNT_PATH:/host -w /host -it ghcr.io/artyjay/linux_base:latest

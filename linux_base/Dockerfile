@@ -25,11 +25,14 @@ curl \
 g++-10 \
 g++-10-multilib \
 gdb-multiarch \
-git \
+gettext \
 gnupg \
 libtool \
 libbz2-dev \
+libcurl4-gnutls-dev \
+libexpat1-dev \
 libffi-dev \
+libghc-zlib-dev \
 liblzma-dev \
 libncurses5-dev \
 libncursesw5-dev \
@@ -46,11 +49,20 @@ python-openssl \
 sudo \
 tar \
 tk-dev \
+unzip \
 xz-utils \
 zlib1g-dev \
  && apt-get autoremove -y \
  && apt-get clean all \
  && rm -rf /var/lib/apt/lists/*
+
+# Build latest git and install it
+RUN mkdir /usr/src/git/ \
+ && wget -q -O - https://github.com/git/git/archive/v2.30.1.tar.gz | tar -xvz --strip-components 1 -C /usr/src/git \
+ && cd /usr/src/git \
+ && make prefix=/usr/ all \
+ && make prefix=/usr/ install \
+ && rm -rf /usr/src/git/*
 
 # Remove alternatives GCC installation setup as will manual setup next to allow
 # trivial swapping between Windows/Linux
@@ -66,19 +78,6 @@ RUN update-alternatives --remove-all c++ \
 # CMake installation
 RUN wget -q -O - https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-Linux-x86_64.tar.gz | tar -xvz --strip-components 1 -C /usr
 
-# User setup
-RUN groupadd 1001 -g 1001 \
- && groupadd 1000 -g 1000 \
- && groupadd 2000 -g 2000 \
- && groupadd 999 -g 999 \
- && useradd -ms /bin/bash builder -g 1001 -G 1000,2000,999 \
- && printf "builder:builder" | chpasswd \
- && adduser builder sudo \
- && printf "builder ALL= NOPASSWD: ALL\\n" >> /etc/sudoers
-
-USER builder
-WORKDIR /home/builder/
-
 # py-env installation
 RUN curl https://pyenv.run | bash \
  && export PATH="/home/builder/.pyenv/bin:$PATH" \
@@ -88,15 +87,16 @@ RUN curl https://pyenv.run | bash \
 # Python & Conan installation
 COPY requirements.txt /tmp_files/
 COPY conan_config/setup_conan.py /tmp_files/
-ENV PYENV_ROOT /home/builder/.pyenv
+ENV PYENV_ROOT /root/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install 3.9.2 \  
  && pyenv global 3.9.2 \
  && pip install --upgrade pip \
  && pip install --no-cache-dir -r /tmp_files/requirements.txt \
- && mkdir -p /home/builder/.conan \
+ && mkdir -p /root/.conan \
  && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \
  && printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc \
  && python /tmp_files/setup_conan.py -p Linux
 
  ENV CONAN_SYSREQUIRES_MODE enabled
+ ENV CONAN_USER_HOME /root
