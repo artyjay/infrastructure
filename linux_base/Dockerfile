@@ -27,18 +27,27 @@ g++-10-multilib \
 gdb-multiarch \
 gettext \
 gnupg \
-libtool \
+libaudio-dev \
 libbz2-dev \
 libcurl4-gnutls-dev \
 libexpat1-dev \
 libffi-dev \
 libghc-zlib-dev \
+libgl1-mesa-dev \
 liblzma-dev \
 libncurses5-dev \
 libncursesw5-dev \
 libreadline-dev \
 libsqlite3-dev \ 
 libssl-dev \
+libtool \
+libxcb-icccm4-dev \
+libxcb-image0-dev \
+libxcb-keysyms1-dev \
+libxcb-render-util0-dev \
+libxcb-util-dev \
+libxcb-xinerama0-dev \
+libxcb-xkb-dev \
 lldb-11 \
 lld-11 \
 m4 \
@@ -50,6 +59,8 @@ sudo \
 tar \
 tk-dev \
 unzip \
+xkb-data \
+xorg-dev \
 xz-utils \
 zlib1g-dev \
  && apt-get autoremove -y \
@@ -71,8 +82,8 @@ RUN update-alternatives --remove-all c++ \
  && update-alternatives --remove-all cc \ 
  && update-alternatives --install /usr/bin/gcc          gcc          /usr/bin/gcc-10          100 --slave /usr/bin/g++     g++     /usr/bin/g++-10 \
  && update-alternatives --install /usr/bin/clang        clang        /usr/bin/clang-11        100 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-11 \
- && update-alternatives --install /usr/bin/cc           cc           /usr/bin/clang           100 --slave /usr/bin/c++     c++     /usr/bin/clang++ \
  && update-alternatives --install /usr/bin/cc           cc           /usr/bin/gcc             100 --slave /usr/bin/c++     c++     /usr/bin/g++ \
+ && update-alternatives --install /usr/bin/cc           cc           /usr/bin/clang           100 --slave /usr/bin/c++     c++     /usr/bin/clang++ \
  && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-11 100
 
 # CMake installation
@@ -98,5 +109,5 @@ RUN pyenv install 3.9.2 \
  && printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc \
  && python /tmp_files/setup_conan.py -p Linux
 
- ENV CONAN_SYSREQUIRES_MODE enabled
- ENV CONAN_USER_HOME /root
+ENV CONAN_SYSREQUIRES_MODE enabled
+ENV CONAN_USER_HOME /root
